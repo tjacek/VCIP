@@ -1,18 +1,13 @@
 from tslearn.shapelets import LearningShapelets
 import timeit
-import files,seqs,feats
+import files,seqs#,feats
 
 def compute_shaplets(in_path,out_path,n_feats=40):
     start = timeit.timeit()
     ts=seqs.read_seqs(in_path)
-#    ts.resize(64)
-#    def helper(seq_i):
-#        return seq_i[:,:32]
-#    ts.transform(helper)
     train,test=ts.split()
     model = LearningShapelets(n_shapelets_per_size=None)#{3: n_feats})
     train_X,train_y,train_names=train.as_dataset()
-#    raise Exception(train_X.shape)
     model.fit(train_X,train_y)
     X,y,names=ts.as_dataset()
     print(X.shape)
@@ -33,7 +28,6 @@ def feat_exp(in_path,out_path,n=20,step=10):
         out_i="%s/%d" % (out_path,n_feats)	
         compute_shaplets(in_path,out_i,n_feats= n_feats)	
 
-in_path="shape/32" #"../deep_dtw/seqs"
-out_path="shape/32_feats"
+in_path="../../2021_XI/cc2/segm2/shape_32" 
+out_path="feats"
 compute_shaplets(in_path,out_path)
-#feat_exp(in_path,out_path)
