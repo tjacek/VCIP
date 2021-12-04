@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.interpolate import CubicSpline
 import files
 
 class Seqs(dict):
@@ -8,7 +9,11 @@ class Seqs(dict):
     def split(self,selector=None):
         train,test=files.split(self,selector)
         return Seqs(train),Seqs(test)
-        
+
+    def resize(self,new_size=64):
+        for name_i in self.keys():
+            self[name_i]=inter(self[name_i],new_size)
+
     def as_dataset(self):
         X,y=[],[]
         names=list(self.keys())
@@ -34,3 +39,12 @@ def read_data(path_i):
 
 def is_npy(path_i):
     return path_i.split(".")[-1]=="npy"
+
+def inter(ts_i,new_size):
+    old_size=ts_i.shape[0]
+    step= new_size/old_size
+    old_x=np.arange(old_size).astype(float)
+    old_x*=step
+    cs=CubicSpline(old_x,ts_i)
+    new_x=np.arange(new_size)
+    return cs(new_x)
