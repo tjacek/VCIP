@@ -12,19 +12,18 @@ def make_feats(in_path,out_path):
         frames=np.expand_dims(frames,axis=0)
         distances = model.transform(frames)
         return distances
-    seqs.transform_lazy(in_path,helper,out_path=out_path)
+    seqs.transform(in_path,helper,out_path=out_path)
 
 def train_model(in_path):
     ts=seqs.read_seqs(in_path) #from_paths(paths)
     ts=ts.split()[0]
     ts.resize(36)
     model = LearningShapelets(n_shapelets_per_size=None,max_iter=2) #{3: 40})
+    ts=ts.random_subset(k=10)
     X,y,names=ts.as_dataset()
     model.fit(X,y)
     return model
 
-#def select_paths(in_path):
-#    return files.top_files(in_path)
 
 def compute_shaplets(in_path,out_path,n_feats=40):
     ts=seqs.read_seqs(in_path)

@@ -1,4 +1,5 @@
 import numpy as np
+import random
 from scipy.interpolate import CubicSpline
 import files
 
@@ -9,6 +10,17 @@ class Seqs(dict):
     def split(self,selector=None):
         train,test=files.split(self,selector)
         return Seqs(train),Seqs(test)
+    
+    def random_subset(self,k):
+        names=list(self.keys())
+        random.shuffle(names)
+        return self.subset(names[:k])
+
+    def subset(self,names):
+        seq_dict=Seqs()
+        for name_i in names:
+            seq_dict[name_i]=self[name_i]
+        return seq_dict
 
     def resize(self,new_size=64):
         for name_i in self.keys():
@@ -30,6 +42,9 @@ def read_seqs(in_path):
         name_i=files.Name(name_i).clean()
         seqs[name_i]=data_i
     return seqs
+
+
+#    def transform():
 
 def read_data(path_i):
     if(is_npy(path_i)):
