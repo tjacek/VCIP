@@ -1,3 +1,4 @@
+import numpy as np
 from tslearn.shapelets import LearningShapelets
 import timeit
 import files,seqs#,feats
@@ -12,7 +13,7 @@ def make_feats(in_path,out_path):
         frames=np.expand_dims(frames,axis=0)
         distances = model.transform(frames)
         return distances
-    seqs.transform(in_path,helper,out_path=out_path)
+    seqs.to_feats(in_path,helper,out_path=out_path)
 
 def train_model(in_path):
     ts=seqs.read_seqs(in_path) #from_paths(paths)
@@ -23,7 +24,6 @@ def train_model(in_path):
     X,y,names=ts.as_dataset()
     model.fit(X,y)
     return model
-
 
 def compute_shaplets(in_path,out_path,n_feats=40):
     ts=seqs.read_seqs(in_path)
@@ -40,13 +40,6 @@ def compute_shaplets(in_path,out_path,n_feats=40):
         dist_feat[names[i]]=x_i
         print(x_i.shape)    
     dist_feat.save(out_path)
-
-def feat_exp(in_path,out_path,n=20,step=10):
-    files.make_dir(out_path)
-    for i in range(1,n+1):
-        n_feats=i*step
-        out_i="%s/%d" % (out_path,n_feats)  
-        compute_shaplets(in_path,out_i,n_feats= n_feats)
 
 in_path="../../2021_XI/cc2/segm2/shape_32" 
 out_path="feats"
