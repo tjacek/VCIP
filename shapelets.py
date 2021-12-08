@@ -41,6 +41,6 @@ def compute_shaplets(in_path,out_path,n_feats=40):
         print(x_i.shape)    
     dist_feat.save(out_path)
 
-in_path="../../2021_XI/cc2/segm2/shape_32" 
-out_path="feats"
+in_path="3DHOI/shape_32" 
+out_path="3DHOI/feats"
 make_feats(in_path,out_path)

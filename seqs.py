@@ -34,6 +34,17 @@ class Seqs(dict):
             y.append(name_i.get_cat())
         return np.array(X),y,names
 
+    def transform(self,fun):
+        for name_i in self.keys():
+            self[name_i]=fun(self[name_i])
+
+    def save(self,out_path):
+        files.make_dir(out_path)
+        for name_i,seq_i in self.items():
+            print(seq_i.shape)
+            out_i="%s/%s" % (out_path,name_i)
+            np.save(out_i,seq_i)
+
 def read_seqs(in_path):
     seqs=Seqs()
     for path_i in files.top_files(in_path):
