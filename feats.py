@@ -33,6 +33,11 @@ class Feats(dict):
 
     def __add__(self,feat_i):
         names=common_names(self.keys(),feat_i.keys())
+        print(len(names))
+        if(len(names)==0):
+            print(self.keys())
+            print(feat_i.keys())
+            raise Exception("Empty inter")
         names.sort()
         new_feats=Feats()
         for name_i in names:

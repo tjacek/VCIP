@@ -79,6 +79,10 @@ class Result(object):
         with open(out_path, 'wb') as out_file:
             pickle.dump(self, out_file)
 
+def train_ens(datasets,clf="LR",selector=None):
+    return [train_model(data_i,clf_type=clf,selector=selector) 
+                    for data_i in datasets]
+
 def train_model(data,binary=False,clf_type="LR",selector=None,
                 model_only=False):
     if(type(data)==str or type(data)==list):    
@@ -123,3 +127,8 @@ def to_one_hot(y,n_cats):
         one_hot.append(np.zeros((n_cats,)))
         one_hot[-1][y_i]=1.0
     return np.array(one_hot)
+
+if __name__ == "__main__":
+    in_path="3DHOI/feats"
+    result=train_model(in_path)
+    result.report()

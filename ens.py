@@ -22,6 +22,16 @@ class Ensemble(object):
         datasets=self.read(common,binary)
         return datasets
 
+class EnsembleHelper(object):
+    def __init__(self,ensemble,binary=False,clf="LR"):
+        self.ensemble=ensemble
+        self.binary=binary
+        self.clf=clf
+
+    def __call__(self,paths):
+        return self.ensemble(paths,binary=self.binary,
+                    clf=self.clf)
+
 class Votes(object):
     def __init__(self,results):
         self.results=results
@@ -57,6 +67,9 @@ def read_dataset(common_path,deep_path):
     deep_data=read_deep(deep_path)
     datasets=[common_data+ data_i 
                 for data_i in deep_data]
+    for data_i in datasets:
+        print(len(data_i))
+#    raise Exception("OK")
     return datasets
 
 def read_deep(deep_path):
@@ -72,6 +85,10 @@ def make_votes(datasets,clf="LR"):
                     for data_i in datasets]
     return Votes(results)  
 
-in_path="3DHOI/1D_CNN/feats"
-ensemble=Ensemble()
-ensemble((in_path,None))
+if __name__ == "__main__":
+    path="3DHOI/%s/feats"
+    common=[path % "1D_CNN","3DHOI/feats"]
+#common+=[path % "dtw/corl",path % "dtw/max_z"]
+    binary=path % "ens/splitI/"
+    ensemble=Ensemble()
+    ensemble((common,binary),binary=True)
